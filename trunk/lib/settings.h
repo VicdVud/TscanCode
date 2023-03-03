@@ -25,6 +25,7 @@
 #include <vector>
 #include <string>
 #include <set>
+#include <fstream>
 #include "config.h"
 #include "library.h"
 #include "suppressions.h"
@@ -61,6 +62,9 @@ private:
     /** @brief terminate checking */
     bool _terminate;
 public:
+	// Êä³öÎÄ¼ş
+	std::string _outputPath;
+	FILE* _outputFile = nullptr;
 
 	bool _no_analyze;
 	bool _no_check;

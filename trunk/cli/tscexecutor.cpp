@@ -923,6 +923,13 @@ void TscanCodeExecutor::reportErr(const std::string &errmsg)
 		std::cout << errmsg << std::endl;
 	else
 		std::cerr << errmsg << std::endl;
+
+	if (!_settings->_outputPath.empty() && _settings->_outputFile)
+	{
+		// 写入至输出文件
+		std::string outMsg = errmsg + "\n";
+		fwrite(outMsg.c_str(), outMsg.size(), 1, _settings->_outputFile);
+	}
 }
 
 void TscanCodeExecutor::reportOut(const std::string &outmsg)

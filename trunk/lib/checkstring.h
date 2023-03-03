@@ -45,8 +45,9 @@ public:
     /** @brief Run checks against the normal token list */
     void runChecks(const Tokenizer *tokenizer, const Settings *settings, ErrorLogger *errorLogger) {
         CheckString checkString(tokenizer, settings, errorLogger);
-		//checkString.strPlusChar();
-        // Checks
+		checkString.strPlusChar();
+		checkString.strPlusInteger();
+		// Checks
 #ifdef TSCANCODE_RULE_OPEN
         
         checkString.checkSuspiciousStringCompare();
@@ -72,6 +73,8 @@ public:
     /** @brief str plus char (unusual pointer arithmetic) */
     void strPlusChar();
 
+	void strPlusInteger();
+
     /** @brief %Check for using bad usage of strncmp and substr */
     void checkIncorrectStringCompare();
 
@@ -88,7 +91,8 @@ private:
     void stringLiteralWriteError(const Token *tok, const Token *strValue);
     void sprintfOverlappingDataError(const Token *tok, const std::string &varname);
     void strPlusCharError(const Token *tok);
-    void incorrectStringCompareError(const Token *tok, const std::string& func, const std::string &string);
+	void strPlusIntegerError(const Token *tok);
+	void incorrectStringCompareError(const Token *tok, const std::string& func, const std::string &string);
     void incorrectStringBooleanError(const Token *tok, const std::string& string);
     void alwaysTrueFalseStringCompareError(const Token *tok, const std::string& str1, const std::string& str2);
     void alwaysTrueStringVariableCompareError(const Token *tok, const std::string& str1, const std::string& str2);

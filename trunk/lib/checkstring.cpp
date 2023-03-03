@@ -248,9 +248,38 @@ void CheckString::strPlusChar()
     }
 }
 
+void CheckString::strPlusInteger()
+{
+	const SymbolDatabase* symbolDatabase = _tokenizer->getSymbolDatabase();
+	const std::size_t functions = symbolDatabase->functionScopes.size();
+	for (std::size_t i = 0; i < functions; ++i) {
+		const Scope * scope = symbolDatabase->functionScopes[i];
+		for (const Token* tok = scope->classStart->next(); tok != scope->classEnd; tok = tok->next()) {
+			if (tok->str() == "+" && tok->astOperand1()) {
+				if (tok->astOperand1()->tokType() == Token::eString) { // string literal...
+
+					if (tok->astOperand2() && (tok->astOperand2()->tokType() == Token::eNumber/* || isChar(tok->astOperand2()->variable())*/)) // added to char variable or char constant
+						strPlusIntegerError(tok);
+				}
+// 				else if (tok->astOperand1()->tokType() == Token::eVariable) {
+// 					const Variable* varTok = tok->astOperand1()->variable();
+// 					if (varTok && varTok->isPointer() && !varTok->isArray() && varTok->typeStartToken()->str() == "char" && isChar(tok->astOperand2()->variable())) {
+// 						strPlusNumberError(tok);
+// 					}
+// 				}
+			}
+		}
+	}
+}
+
 void CheckString::strPlusCharError(const Token *tok)
 {
 	reportError(tok, Severity::warning, ErrorType::Suspicious, "strPlusChar", "Unusual pointer arithmetic. A value of type 'char' is added to a string literal.", ErrorLogger::GenWebIdentity(tok->str()));
+}
+
+void CheckString::strPlusIntegerError(const Token *tok)
+{
+	reportError(tok, Severity::warning, ErrorType::Suspicious, "strPlusInteger", "Unusual pointer arithmetic. A value of type 'interger' is added to a string literal.", ErrorLogger::GenWebIdentity(tok->str()));
 }
 
 //---------------------------------------------------------------------------

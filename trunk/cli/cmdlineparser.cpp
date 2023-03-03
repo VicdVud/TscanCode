@@ -105,6 +105,18 @@ bool CmdLineParser::ParseFromArgs(int argc, const char* const argv[])
             _exitAfterPrint = true;
             return true;
         }
+		else if (std::strncmp(argv[i], "--output=", 9) == 0)
+		{
+			_settings->_outputPath = argv[i] + 9;
+			if (!_settings->_outputPath.empty())
+			{
+				_settings->_outputFile = fopen(_settings->_outputPath.c_str(), "w+");
+				if (!_settings->_outputFile)
+				{
+					std::cerr << "Cannot open output file: " << _settings->_outputPath << std::endl;
+				}
+			}
+		}
 		else if (std::strcmp(argv[i], "--no-analyze") == 0)
 		{
 			_settings->_no_analyze = true;
